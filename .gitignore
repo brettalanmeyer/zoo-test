@@ -1,0 +1,11 @@
+/BostonMedicalSurvey/target/
+/BostonMedicalSurvey/.settings/
+.metadata
+.recommenders
+.classpath
+*.class
+*.jar
+*.war
+*.ear
+/Zoo/.project
+/Zoo/.settings/org.eclipse.jdt.core.prefs
