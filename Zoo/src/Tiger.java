@@ -15,10 +15,11 @@ public class Tiger extends Animal {
 		Tiger.species--;
 	}
 	
-	public void eat(Animal.Food food) {
+	public String eat(Animal.Food food) {
 		if(!food.equals(Animal.Food.Grain)){
-			super.eat(food);
+			return super.eat(food);
 		}
+		return "";
 	}
 
 }

@@ -24,46 +24,46 @@ public abstract class Animal implements Comparator<Animal> {
 		return this.energyLevel;
 	}
 
-	public void eat(Animal.Food food) {
-		System.out.println("Eating...");
+	public String eat(Animal.Food food) {
 		this.energyLevel += this.energyLevelEat;
+		return "Eating...";
 	}
 
-	public void sleep() {
-		System.out.println("Sleeping...");
+	public String sleep() {
 		this.energyLevel += this.energyLevelSleep;
+		return "Sleeping...";
 	}
 
-	public void speak() {
-		this.speak("Grrr");
+	public String speak() {
+		return "Grrr";
 	}
 
-	public void speak(String sound) {
-		System.out.println(sound);
+	public String speak(String sound) {
+		return sound;
 	}
 
-	public void play() {
-		System.out.println("Playing...");
+	public String play() {
 		this.energyLevel += this.energyLevelPlay;
+		String out = "Playing...";
 
 		if (this.energyLevel > 0) {
-			this.speak("YE-AH!");
+			out.concat(this.speak("YE-AH!"));
 		} else {
-			this.speak("I'm tired.");
+			out.concat(this.speak("I'm tired."));
 		}
+		return out;
 	}
 
-	public void dance() {
+	public String dance() {
 		if (this.isTrainable) {
-			this.speak("Look Ma! I'm Dancing.");
+			return this.speak("Look Ma! I'm Dancing.");
 		} else {
-			this.speak("I'm not trained to dance...");
+			return this.speak("I'm not trained to dance...");
 		}
 	}
 	
-	public void soundOff(){
-		this.speak();
-		this.speak("Energy Level: " + this.energyLevel);
+	public String soundOff(){
+		return this.speak("Energy Level: " + this.energyLevel);
 	}
 	
 	public void kill(){

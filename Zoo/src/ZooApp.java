@@ -1,13 +1,93 @@
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class ZooApp {
 	
 	public static Zoo zoo;
 	public static Animal animal;
+	static JLabel label = new JLabel("My Zoo");
 	
 	public static void main(String[] args) {
+		window();
 		scan();
+	}
+	
+	public static void print(String text){
+		System.out.println(text);
+		label.setText(text);
+	}
+	
+	public static JButton newButton(String text){
+		JButton button = new JButton();
+		button.setText(text);
+		button.setPreferredSize(new Dimension(280, 24));
+		
+		button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				createZoo();
+			}
+		});
+		
+		return button;
+	}
+	
+	public static <T> JButton newButton(String text, Runnable function){
+		JButton button = new JButton();
+		button.setText(text);
+		button.setPreferredSize(new Dimension(200, 24));
+		button.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				function.run();
+			}
+		});
+		return button;
+	}
+	
+	public static void window(){
+		
+		JFrame frame = new JFrame("Brett's Zoo Program");
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout());
+		
+		label.setPreferredSize(new Dimension(200, 24));
+		panel.add(label);
+		
+		panel.add(newButton("Create Zoo", () -> createZoo()));
+		panel.add(newButton("Add Lion", () -> add(Lion.class)));
+		panel.add(newButton("Add Tiger", () -> add(Tiger.class)));
+		panel.add(newButton("Add Bear", () -> add(Bear.class)));
+		panel.add(newButton("Select Lion", () -> select(Lion.class)));
+		panel.add(newButton("Select Tiger", () -> select(Tiger.class)));
+		panel.add(newButton("Select Bear", () -> select(Bear.class)));
+		panel.add(newButton("Unselect Animal", () -> unselect()));
+		panel.add(newButton("Kill Lion", () -> kill(Lion.class)));
+		panel.add(newButton("Kill Tiger", () -> kill(Tiger.class)));
+		panel.add(newButton("Kill Bear", () -> kill(Bear.class)));
+		panel.add(newButton("Eat", () -> eat()));
+		panel.add(newButton("Play", () -> play()));
+		panel.add(newButton("Dance", () -> dance()));
+		panel.add(newButton("Soundoff", () -> soundOff()));
+		panel.add(newButton("How many lions?", () -> howMany(Lion.class)));
+		panel.add(newButton("How many tigers?", () -> howMany(Tiger.class)));
+		panel.add(newButton("How many bears?", () -> howMany(Bear.class)));
+		panel.add(newButton("How many animals?", () -> howMany()));
+		
+		frame.add(panel);
+		frame.setSize(320, 640);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
 	}
 	
 	public static void scan(){
@@ -78,7 +158,7 @@ public class ZooApp {
 			howMany(Bear.class);
 			break;
 		case "how many animals?":
-			howManyAnimals();
+			howMany();
 			break;
 		case "help":
 			help();
@@ -95,7 +175,7 @@ public class ZooApp {
 	
 	private static void createZoo(){
 		zoo = new Zoo();
-		System.out.println("Zoo Created...");
+		print("Zoo Created...");
 	}
 	
 	private static void add(Class<?> clazz){
@@ -105,7 +185,7 @@ public class ZooApp {
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		System.out.println(clazz.getName() + " Added...");
+		print(clazz.getName() + " Added...");
 	}
 	
 	private static void select(Class<?> clazz){
@@ -119,71 +199,71 @@ public class ZooApp {
 			}
 		}
 		if(found){
-			System.out.println("A " + clazz.getName() + " has been selected...");
+			print("A " + clazz.getName() + " has been selected...");
 		} else {
-			System.out.println("No " + clazz.getName() + " could be found...");
+			print("No " + clazz.getName() + " could be found...");
 		}
 	}
 	
 	private static void kill(Class<?> clazz){
 		if(zoo.kill(clazz)){
-			System.out.println("A " + clazz.getName() + " has been killed...");
+			print("A " + clazz.getName() + " has been killed...");
 		} else {
-			System.out.println("A " + clazz.getName() + " could not be found...");
+			print("A " + clazz.getName() + " could not be found...");
 		}
 	}
 	
 	private static void unselect(){
 		animal = null;
-		System.out.println("Animal has been unselected...");
+		print("Animal has been unselected...");
 	}
 	
 	private static void howMany(Class<?> clazz){
 		boolean found = false;
 		for(Animal animal : zoo.getAnimals()){
 			if(clazz.isInstance(animal)){
-				System.out.println(animal.getSpecies());
+				print(new Integer(animal.getSpecies()).toString());
 				found = true;
 				break;
 			}
 		}
 		if(!found){
-			System.out.println(0);
+			print("0");
 		}
 	}
 	
-	private static void howManyAnimals(){
-		System.out.println(zoo.getAnimals().size());
+	private static void howMany(){
+		print(new Integer(zoo.getAnimals().size()).toString());
 	}
 	
 	private static void eat(){
 		if(hasAnimal()){
-			animal.eat(Animal.Food.Fish);
+			print(animal.eat(Animal.Food.Fish));
 		}
 	}
 
 	private static void play(){
 		if(hasAnimal()){
-			animal.play();
+			print(animal.play());
 		}
 	}
 	
 	private static void dance(){
 		if(hasAnimal()){
-			animal.dance();
+			print(animal.dance());
 		}
 	}
 
 	private static void soundOff(){
 		if(hasAnimal()){
-			animal.soundOff();
+			print(animal.soundOff());
 		}
 	}
 	
 	private static boolean hasAnimal(){
 		boolean result = (animal != null);
 		if(!result){
-			System.out.println("An animal must be selected first...");
+			print("An animal must be selected first...");
 		}
 		return result;
 	}
@@ -211,4 +291,5 @@ public class ZooApp {
 		System.out.println(" - how many animals?");
 		System.out.println(" - help");
 	}
+	
 }
